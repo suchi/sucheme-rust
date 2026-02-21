@@ -1,6 +1,6 @@
-# cprustscheme チュートリアル
+# sucheme-rust チュートリアル
 
-RustでR5RS準拠のSchemeインタープリター `cprustscheme` を使って、Schemeプログラミングを学ぶ総合ガイドです。
+RustでR5RS準拠のSchemeインタープリター `sucheme-rust` を使って、Schemeプログラミングを学ぶ総合ガイドです。
 
 ## 前提
 
@@ -910,31 +910,31 @@ words  ; => ("hello" "world" "scheme")
 
 ```bash
 # 各章のサンプルを実行
-cprustscheme examples/01-basics.scm
-cprustscheme examples/02-variables.scm
-cprustscheme examples/03-functions.scm
-cprustscheme examples/04-conditionals.scm
-cprustscheme examples/05-lists.scm
-cprustscheme examples/06-strings.scm
-cprustscheme examples/07-vectors.scm
-cprustscheme examples/08-tail-recursion.scm
-cprustscheme examples/09-higher-order.scm
-cprustscheme examples/10-macros.scm
-cprustscheme examples/11-practical-math.scm
-cprustscheme examples/12-data-structures.scm
-cprustscheme examples/13-io.scm
-cprustscheme examples/14-sorting-algorithms.scm
-cprustscheme examples/15-oop.scm
-cprustscheme examples/16-continuations.scm
-cprustscheme examples/17-pattern-matching.scm
-cprustscheme examples/18-lazy-evaluation.scm
-cprustscheme examples/19-practical-programs.scm
-cprustscheme examples/20-advanced.scm
+sucheme-rust examples/01-basics.scm
+sucheme-rust examples/02-variables.scm
+sucheme-rust examples/03-functions.scm
+sucheme-rust examples/04-conditionals.scm
+sucheme-rust examples/05-lists.scm
+sucheme-rust examples/06-strings.scm
+sucheme-rust examples/07-vectors.scm
+sucheme-rust examples/08-tail-recursion.scm
+sucheme-rust examples/09-higher-order.scm
+sucheme-rust examples/10-macros.scm
+sucheme-rust examples/11-practical-math.scm
+sucheme-rust examples/12-data-structures.scm
+sucheme-rust examples/13-io.scm
+sucheme-rust examples/14-sorting-algorithms.scm
+sucheme-rust examples/15-oop.scm
+sucheme-rust examples/16-continuations.scm
+sucheme-rust examples/17-pattern-matching.scm
+sucheme-rust examples/18-lazy-evaluation.scm
+sucheme-rust examples/19-practical-programs.scm
+sucheme-rust examples/20-advanced.scm
 
 # 対話型で試す
-cprustscheme
+sucheme-rust
 
 # Web UIで試す
-cprustscheme --web
+sucheme-rust --web
 # ブラウザで http://localhost:8080 を開く
 ```

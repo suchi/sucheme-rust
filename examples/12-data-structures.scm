@@ -1,6 +1,6 @@
 ;;; examples/12-data-structures.scm
-;;; cprustscheme チュートリアル - 第12章: データ構造の実装
-;;; 実行方法: cprustscheme examples/12-data-structures.scm
+;;; sucheme-rust チュートリアル - 第12章: データ構造の実装
+;;; 実行方法: sucheme-rust examples/12-data-structures.scm
 
 (display "=== 第12章: データ構造の実装 ===") (newline)
 

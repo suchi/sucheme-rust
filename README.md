@@ -1,8 +1,8 @@
-# cprustscheme
+# sucheme-rust
 
 RustでR5RS準拠のSchemeインタープリターを実装したプロジェクトです。GitHub Copilotと協力して開発されました。
 
-[![CI](https://github.com/suchi/cprustscheme/actions/workflows/ci.yml/badge.svg)](https://github.com/suchi/cprustscheme/actions/workflows/ci.yml)
+[![CI](https://github.com/suchi/sucheme-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/suchi/sucheme-rust/actions/workflows/ci.yml)
 
 ## 特徴
 
@@ -21,25 +21,25 @@ RustでR5RS準拠のSchemeインタープリターを実装したプロジェク
 cargo build --release
 
 # インタラクティブREPL
-./target/release/cprustscheme
+./target/release/sucheme-rust
 
 # 式の評価
-./target/release/cprustscheme -e "(+ 1 2 3)"
+./target/release/sucheme-rust -e "(+ 1 2 3)"
 
 # Schemeファイルの実行
-./target/release/cprustscheme myfile.scm
+./target/release/sucheme-rust myfile.scm
 
 # ファイルを読み込んでからREPL
-./target/release/cprustscheme -l lib.scm -i
+./target/release/sucheme-rust -l lib.scm -i
 
 # Webサーバー起動 (http://localhost:8080)
-./target/release/cprustscheme --web
+./target/release/sucheme-rust --web
 ```
 
 ## CLIオプション
 
 ```
-Usage: cprustscheme [OPTIONS] [FILE [ARGS...]]
+Usage: sucheme-rust [OPTIONS] [FILE [ARGS...]]
 
 オプション:
   -h, --help           ヘルプを表示
@@ -71,16 +71,16 @@ sudo apt-get install llvm-17-dev libpolly-17-dev
 cargo build --features llvm-backend
 
 # JIT モードで実行（インタープリターへの透過的フォールバック付き）
-./target/debug/cprustscheme --jit -e "(let ((n 1000)) (* n n))"
+./target/debug/sucheme-rust --jit -e "(let ((n 1000)) (* n n))"
 # → 1000000
 
 # 生成される LLVM IR の確認（LLVM が定数式を最適化する様子も確認可能）
-./target/debug/cprustscheme --emit-llvm -e "(+ 1 2 3)"
+./target/debug/sucheme-rust --emit-llvm -e "(+ 1 2 3)"
 # → define i64 @__entry() { entry: ret i64 6 }
 #   ← LLVM が (+ 1 2 3) を ret i64 6 に定数畳み込み！
 
 # SCHEME_DUMP_IR=1 でデバッグ出力
-SCHEME_DUMP_IR=1 ./target/debug/cprustscheme --jit -e "(if (> 10 5) 42 0)"
+SCHEME_DUMP_IR=1 ./target/debug/sucheme-rust --jit -e "(if (> 10 5) 42 0)"
 ```
 
 ### JIT 対応サブセット

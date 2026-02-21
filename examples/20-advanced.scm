@@ -1,6 +1,6 @@
 ;;; examples/20-advanced.scm
-;;; cprustscheme チュートリアル - 第20章: 高度なトピック
-;;; 実行方法: cprustscheme examples/20-advanced.scm
+;;; sucheme-rust チュートリアル - 第20章: 高度なトピック
+;;; 実行方法: sucheme-rust examples/20-advanced.scm
 
 (display "=== 第20章: 高度なトピック ===") (newline)
 

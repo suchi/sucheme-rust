@@ -1,6 +1,6 @@
 ;;; examples/07-vectors.scm
-;;; cprustscheme チュートリアル - 第7章: ベクター
-;;; 実行方法: cprustscheme examples/07-vectors.scm
+;;; sucheme-rust チュートリアル - 第7章: ベクター
+;;; 実行方法: sucheme-rust examples/07-vectors.scm
 
 (display "=== 第7章: ベクター ===") (newline)
 

@@ -1,6 +1,6 @@
 ;;; examples/03-functions.scm
-;;; cprustscheme チュートリアル - 第3章: 関数と手続き
-;;; 実行方法: cprustscheme examples/03-functions.scm
+;;; sucheme-rust チュートリアル - 第3章: 関数と手続き
+;;; 実行方法: sucheme-rust examples/03-functions.scm
 
 (display "=== 第3章: 関数と手続き ===") (newline)
 

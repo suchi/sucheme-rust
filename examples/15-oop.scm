@@ -1,6 +1,6 @@
 ;;; examples/15-oop.scm
-;;; cprustscheme チュートリアル - 第15章: オブジェクト指向プログラミング
-;;; 実行方法: cprustscheme examples/15-oop.scm
+;;; sucheme-rust チュートリアル - 第15章: オブジェクト指向プログラミング
+;;; 実行方法: sucheme-rust examples/15-oop.scm
 
 (display "=== 第15章: オブジェクト指向プログラミング ===") (newline)
 

@@ -1,6 +1,6 @@
 ;;; examples/19-practical-programs.scm
-;;; cprustscheme チュートリアル - 第19章: 実用的なプログラム
-;;; 実行方法: cprustscheme examples/19-practical-programs.scm
+;;; sucheme-rust チュートリアル - 第19章: 実用的なプログラム
+;;; 実行方法: sucheme-rust examples/19-practical-programs.scm
 
 (display "=== 第19章: 実用的なプログラム ===") (newline)
 

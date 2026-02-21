@@ -1,6 +1,6 @@
 ;;; examples/11-practical-math.scm
-;;; cprustscheme チュートリアル - 第11章: 実用的な数値計算
-;;; 実行方法: cprustscheme examples/11-practical-math.scm
+;;; sucheme-rust チュートリアル - 第11章: 実用的な数値計算
+;;; 実行方法: sucheme-rust examples/11-practical-math.scm
 
 (display "=== 第11章: 実用的な数値計算 ===") (newline)
 

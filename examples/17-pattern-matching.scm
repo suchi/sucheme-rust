@@ -1,6 +1,6 @@
 ;;; examples/17-pattern-matching.scm
-;;; cprustscheme チュートリアル - 第17章: パターンマッチング
-;;; 実行方法: cprustscheme examples/17-pattern-matching.scm
+;;; sucheme-rust チュートリアル - 第17章: パターンマッチング
+;;; 実行方法: sucheme-rust examples/17-pattern-matching.scm
 
 (display "=== 第17章: パターンマッチング ===") (newline)
 

@@ -1,6 +1,6 @@
 ;;; examples/16-continuations.scm
-;;; cprustscheme チュートリアル - 第16章: 継続と call/cc
-;;; 実行方法: cprustscheme examples/16-continuations.scm
+;;; sucheme-rust チュートリアル - 第16章: 継続と call/cc
+;;; 実行方法: sucheme-rust examples/16-continuations.scm
 
 (display "=== 第16章: 継続と call/cc ===") (newline)
 
