@@ -97,6 +97,7 @@ pub enum Port {
 }
 
 /// Environment (scope chain).
+#[derive(Default)]
 pub struct Env {
     bindings: HashMap<String, Val>,
     parent: Option<Rc<RefCell<Env>>>,
@@ -144,15 +145,6 @@ impl Env {
             parent.borrow_mut().set(name, val)
         } else {
             false
-        }
-    }
-}
-
-impl Default for Env {
-    fn default() -> Self {
-        Env {
-            bindings: HashMap::new(),
-            parent: None,
         }
     }
 }
@@ -221,10 +213,17 @@ impl Val {
     }
 
     /// Convert to Scheme list as a Vec<Val>.
+    /// Returns an error if the list is improper or exceeds [`MAX_LIST_DEPTH`] elements.
     pub fn to_vec(&self) -> Result<Vec<Val>, SchemeError> {
+        const MAX_LIST_DEPTH: usize = 1_000_000;
         let mut items = Vec::new();
         let mut cur = self.clone();
         loop {
+            if items.len() >= MAX_LIST_DEPTH {
+                return Err(SchemeError::Eval(format!(
+                    "list too long or circular (limit: {MAX_LIST_DEPTH})"
+                )));
+            }
             match cur {
                 Val::Nil => break,
                 Val::Pair(ref p) => {

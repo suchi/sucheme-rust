@@ -31,6 +31,7 @@ fn run(args: Vec<String>) -> anyhow::Result<()> {
     let mut eval_exprs: Vec<String> = Vec::new();
     let mut web_mode = false;
     let mut port: u16 = 8080;
+    let mut bind_addr: Option<String> = None;
     let mut no_stdlib = false;
     let mut interactive = false;
     let mut quiet = false;
@@ -61,6 +62,12 @@ fn run(args: Vec<String>) -> anyhow::Result<()> {
                 i += 1;
                 if i < args.len() {
                     port = args[i].parse().unwrap_or(8080);
+                }
+            }
+            "--bind" | "-b" => {
+                i += 1;
+                if i < args.len() {
+                    bind_addr = Some(args[i].clone());
                 }
             }
             "--help" | "-h" => {
@@ -126,7 +133,7 @@ fn run(args: Vec<String>) -> anyhow::Result<()> {
 
     if web_mode {
         // Start the web server
-        actix_web::rt::System::new().block_on(web::run_web_server(port))?;
+        actix_web::rt::System::new().block_on(web::run_web_server(port, bind_addr))?;
         return Ok(());
     }
 
@@ -258,6 +265,9 @@ fn print_help() {
     println!("      --script FILE    Execute FILE as a script (args follow)");
     println!("  -w, --web            Start the web REPL server");
     println!("  -p, --port PORT      Web server port (default: 8080)");
+    println!(
+        "  -b, --bind ADDR      Bind address (default: 0.0.0.0; e.g. 127.0.0.1 for localhost)"
+    );
     println!("      --               Pass remaining args to script as *argv*");
     #[cfg(feature = "llvm-backend")]
     {

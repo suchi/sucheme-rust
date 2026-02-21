@@ -555,9 +555,7 @@ pub fn eval(expr: Val, env: &Rc<RefCell<Env>>) -> SchemeResult {
                             let p = eval(items[0].clone(), &env)?;
                             match p {
                                 Val::Proc(Proc::Lambda {
-                                    body,
-                                    env: lenv,
-                                    ..
+                                    body, env: lenv, ..
                                 }) => {
                                     let body_env = Env::extend(lenv);
                                     let b_list = body;

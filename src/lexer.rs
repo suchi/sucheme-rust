@@ -37,8 +37,18 @@ pub enum Token {
     Char(char),
 }
 
+/// Maximum allowed source size (1 MiB) to prevent DoS via huge inputs.
+const MAX_SOURCE_BYTES: usize = 1 << 20; // 1 048 576
+
 /// Tokenize a Scheme source string.
 pub fn tokenize(source: &str) -> Result<Vec<Token>, SchemeError> {
+    if source.len() > MAX_SOURCE_BYTES {
+        return Err(SchemeError::Eval(format!(
+            "source too large: {} bytes (limit: {} bytes)",
+            source.len(),
+            MAX_SOURCE_BYTES
+        )));
+    }
     let chars: Vec<char> = source.chars().collect();
     let mut pos = 0;
     let mut tokens = Vec::new();

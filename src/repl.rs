@@ -22,7 +22,6 @@ pub fn run_repl() -> anyhow::Result<()> {
 
 /// Run the interactive REPL with a pre-built environment.
 pub fn run_repl_with_env(env: Rc<RefCell<Env>>) -> anyhow::Result<()> {
-
     let mut rl = DefaultEditor::new()?;
     rl.set_edit_mode(EditMode::Emacs);
     rl.set_auto_add_history(true);
