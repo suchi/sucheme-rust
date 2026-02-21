@@ -9,12 +9,15 @@ RustでR5RS準拠のSchemeインタープリターを実装したプロジェク
 - **R5RS準拠** — 付録マクロを含むR5RS仕様を完全実装
 - **末尾呼び出し最適化** — トランポリンループによる適切な末尾呼び出し（スタックオーバーフローなし）
 - **インタラクティブREPL** — Emacsキーバインドとコマンド履歴（rustyline使用）
-- **LLVM 17 JIT バックエンド** — `--features llvm-backend` で整数演算をネイティブコードに JIT コンパイル
+- **LLVM 17 JIT バックエンド** — `--features llvm-backend` で整数演算をネイティブコードに JIT コンパイル（Linux のみ）
 - **Web UI** — 内蔵HTTPサーバーによるブラウザREPL
 - **Schemeで実装した標準ライブラリ** — R5RS付録マクロとユーティリティ
 - **豊富なCLIオプション** — `--eval`、`--load`、`--script`、`--interactive`、`--jit` など
+- **クロスプラットフォーム** — Linux・macOS・Windows に対応
 
 ## クイックスタート
+
+### Linux / macOS
 
 ```bash
 # ビルド
@@ -34,6 +37,25 @@ cargo build --release
 
 # Webサーバー起動 (http://localhost:8080)
 ./target/release/sucheme-rust --web
+```
+
+### Windows
+
+```powershell
+# ビルド
+cargo build --release
+
+# インタラクティブREPL
+.\target\release\sucheme-rust.exe
+
+# 式の評価
+.\target\release\sucheme-rust.exe -e "(+ 1 2 3)"
+
+# Schemeファイルの実行
+.\target\release\sucheme-rust.exe myfile.scm
+
+# Webサーバー起動 (http://localhost:8080)
+.\target\release\sucheme-rust.exe --web
 ```
 
 ## CLIオプション
