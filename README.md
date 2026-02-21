@@ -1,64 +1,119 @@
 # cprustscheme
 
-R5RS-compliant Scheme interpreter written in Rust, built with GitHub Copilot.
+RustでR5RS準拠のSchemeインタープリターを実装したプロジェクトです。GitHub Copilotと協力して開発されました。
 
 [![CI](https://github.com/suchi/cprustscheme/actions/workflows/ci.yml/badge.svg)](https://github.com/suchi/cprustscheme/actions/workflows/ci.yml)
 
-## Features
+## 特徴
 
-- **R5RS-compliant** – implements the full R5RS specification including the appendix macros
-- **Tail Call Optimization** – proper tail calls via trampoline loop (no stack overflow)
-- **Interactive REPL** – with Emacs key bindings and command history (rustyline)
-- **Web UI** – browser-based REPL via built-in HTTP server
-- **Standard Library** – R5RS macros and utilities implemented in Scheme itself
+- **R5RS準拠** — 付録マクロを含むR5RS仕様を完全実装
+- **末尾呼び出し最適化** — トランポリンループによる適切な末尾呼び出し（スタックオーバーフローなし）
+- **インタラクティブREPL** — Emacsキーバインドとコマンド履歴（rustyline使用）
+- **Web UI** — 内蔵HTTPサーバーによるブラウザREPL
+- **Schemeで実装した標準ライブラリ** — R5RS付録マクロとユーティリティ
+- **豊富なCLIオプション** — `--eval`、`--load`、`--script`、`--interactive` など
 
-## Quick Start
+## クイックスタート
 
 ```bash
-# Build
+# ビルド
 cargo build --release
 
-# Interactive REPL
+# インタラクティブREPL
 ./target/release/cprustscheme
 
-# Evaluate an expression
+# 式の評価
 ./target/release/cprustscheme -e "(+ 1 2 3)"
 
-# Run a Scheme file
+# Schemeファイルの実行
 ./target/release/cprustscheme myfile.scm
 
-# Start web server (http://localhost:8080)
+# ファイルを読み込んでからREPL
+./target/release/cprustscheme -l lib.scm -i
+
+# Webサーバー起動 (http://localhost:8080)
 ./target/release/cprustscheme --web
 ```
 
-## Documentation
+## CLIオプション
 
-- [Statement of Work (SOW)](docs/SOW.md)
-- [Onboarding Guide](docs/ONBOARDING.md)
-- [ADR-001: Language Choice](docs/adr/ADR-001-language-choice.md)
-- [ADR-002: Tail Call Optimization](docs/adr/ADR-002-tco-trampoline.md)
-- [ADR-003: Standard Library in Scheme](docs/adr/ADR-003-stdlib-in-scheme.md)
-- [ADR-004: Web UI with actix-web](docs/adr/ADR-004-web-ui-actix.md)
+```
+Usage: cprustscheme [OPTIONS] [FILE [ARGS...]]
 
-## Project Structure
+オプション:
+  -h, --help           ヘルプを表示
+  -v, --version        バージョンを表示
+  -e, --eval EXPR      式を評価（複数指定可）
+  -l, --load FILE      REPL/スクリプト実行前にファイルをロード
+  -i, --interactive    -e やファイル実行後もREPLを続行
+  -q, --quiet          起動バナーを抑制
+  -n, --no-stdlib      標準ライブラリをロードしない
+      --script FILE    スクリプトとしてファイルを実行
+  -w, --web            Webサーバー起動
+  -p, --port PORT      ポート番号（デフォルト: 8080）
+      --               以降の引数をスクリプトに渡す (*argv*)
+```
+
+## アーキテクチャ
+
+```mermaid
+graph LR
+    A[ソースコード] --> B[Lexer<br/>字句解析]
+    B --> C[Parser<br/>構文解析]
+    C --> D[Evaluator<br/>評価器]
+    D --> E[結果]
+    D <--> F[Environment<br/>環境チェーン]
+    D --> G[Builtins<br/>組み込み手続き]
+    D --> H[stdlib.scm<br/>標準ライブラリ]
+```
+
+## プロジェクト構成
 
 ```
 src/
-  main.rs      - Entry point and CLI
-  types.rs     - Scheme value types
-  lexer.rs     - Tokenizer
-  parser.rs    - S-expression parser
-  eval.rs      - Evaluator with TCO
-  builtins.rs  - Built-in procedures
-  repl.rs      - Interactive REPL
-  web.rs       - Web server
+  main.rs      - エントリポイントとCLI
+  types.rs     - Scheme値型（Val、Env、Proc）
+  lexer.rs     - 字句解析器
+  parser.rs    - S式パーサー
+  eval.rs      - 評価器（末尾呼び出し最適化付き）
+  builtins.rs  - 組み込み手続き
+  repl.rs      - インタラクティブREPL
+  web.rs       - Webサーバー
 scheme/
-  stdlib.scm   - Standard library in Scheme
+  stdlib.scm   - Schemeで実装した標準ライブラリ
 web/static/
   index.html   - Web REPL UI
+examples/      - サンプルプログラム（章別）
+docs/          - ドキュメント（SOW、ADR、チュートリアル）
 ```
 
-## License
+## ドキュメント
+
+| ドキュメント | 内容 |
+|------------|------|
+| [SOW](docs/SOW.md) | 作業範囲定義書 |
+| [オンボーディングガイド](docs/ONBOARDING.md) | 開発者向け入門ガイド |
+| [R5RS対応状況](docs/R5RS-COMPLIANCE.md) | R5RS関数・マクロの対応表 |
+| [チュートリアル](docs/TUTORIAL.md) | 100以上のサンプルで学ぶScheme |
+| [ADR-001](docs/adr/ADR-001-language-choice.md) | 言語選択の理由 |
+| [ADR-002](docs/adr/ADR-002-tco-trampoline.md) | TCO戦略 |
+| [ADR-003](docs/adr/ADR-003-stdlib-in-scheme.md) | 標準ライブラリをSchemeで実装 |
+| [ADR-004](docs/adr/ADR-004-web-ui-actix.md) | Web UIフレームワーク選択 |
+
+## サンプルの実行
+
+```bash
+# 基礎
+cargo run -- examples/01-basics.scm
+# 変数と定義
+cargo run -- examples/02-variables.scm
+# 関数
+cargo run -- examples/03-functions.scm
+# 全サンプルを一覧表示
+ls examples/
+```
+
+## ライセンス
 
 MIT
- 
+

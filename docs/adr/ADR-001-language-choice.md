@@ -1,24 +1,52 @@
-# ADR-001: Use Rust for Scheme Interpreter Implementation
+# ADR-001: Schemeインタープリターの実装言語にRustを選択
 
-**Date:** 2026-02-21  
-**Status:** Accepted
+**日付:** 2026-02-21
+**ステータス:** 承認済み
 
-## Context
+## 背景
 
-R5RS準拠のSchemeインタープリターをどの言語で実装するかの決定。
+R5RS準拠のSchemeインタープリターをどの言語で実装するかの決定が必要だった。
 
-## Decision
+## 候補言語の比較
 
-Rustを使用する。
+```mermaid
+graph TD
+    Q["実装言語の選択"] --> RUST["Rust"]
+    Q --> HASKELL["Haskell"]
+    Q --> C["C/C++"]
+    Q --> GO["Go"]
 
-## Rationale
+    RUST --> R1["✅ メモリ安全性"]
+    RUST --> R2["✅ 高パフォーマンス"]
+    RUST --> R3["✅ 豊富なクレート"]
+    RUST --> R4["✅ enum による型モデリング"]
 
-- **メモリ安全性**: GCなしでのメモリ管理、Rc<RefCell<>>でSchemeの共有可変状態を安全に扱える
+    HASKELL --> H1["✅ 関数型親和性"]
+    HASKELL --> H2["❌ 実行速度"]
+    HASKELL --> H3["❌ 学習コスト"]
+
+    C --> C1["✅ 最高速度"]
+    C --> C2["❌ メモリ安全性なし"]
+    C --> C3["❌ 開発速度低"]
+
+    GO --> G1["✅ シンプル"]
+    GO --> G2["❌ GCがSchemeのGCと干渉"]
+    GO --> G3["❌ 値型の表現が冗長"]
+```
+
+## 決定
+
+**Rustを使用する。**
+
+## 理由
+
+- **メモリ安全性**: GCなしでのメモリ管理。`Rc<RefCell<>>` でSchemeの共有可変状態を安全に扱える
 - **パフォーマンス**: コンパイル済みバイナリで高速実行
-- **エコシステム**: actix-web (Web), rustyline (REPL), serde (JSON) の充実したクレート
-- **型システム**: enum によるScheme値型の自然なモデリング
+- **エコシステム**: actix-web (Web)、rustyline (REPL)、serde (JSON) の充実したクレート
+- **型システム**: `enum` によるScheme値型の自然なモデリング
 
-## Consequences
+## 結果
 
 - Rustのライフタイムシステムにより、Schemeの環境チェーン実装に `Rc<RefCell<>>` パターンが必要
-- 完全な継続 (call/cc) の実装が複雑になる（初期フェーズでは制限付きのエスケープ継続のみ）
+- 完全な継続 (call/cc) の実装が複雑になるため、初期フェーズでは制限付きのエスケープ継続のみ
+- `Rc<RefCell<>>` によるサイクルガベージコレクションは将来の課題

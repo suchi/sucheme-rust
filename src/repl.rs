@@ -12,12 +12,16 @@ const HISTORY_FILE: &str = ".scheme_history";
 const PROMPT: &str = "scheme> ";
 const PROMPT_CONT: &str = "       ";
 
-/// Run the interactive REPL.
+/// Run the interactive REPL (new environment with stdlib).
+#[allow(dead_code)]
 pub fn run_repl() -> anyhow::Result<()> {
     let env = make_global_env();
-
-    // Load stdlib if it exists next to the binary
     load_stdlib(&env);
+    run_repl_with_env(env)
+}
+
+/// Run the interactive REPL with a pre-built environment.
+pub fn run_repl_with_env(env: Rc<RefCell<Env>>) -> anyhow::Result<()> {
 
     let mut rl = DefaultEditor::new()?;
     rl.set_edit_mode(EditMode::Emacs);
