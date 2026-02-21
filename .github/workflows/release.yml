@@ -19,6 +19,10 @@ jobs:
             target: x86_64-unknown-linux-gnu
             artifact: sucheme-rust
             archive: sucheme-rust-linux-x86_64.tar.gz
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact: sucheme-rust.exe
+            archive: sucheme-rust-windows-x86_64.zip
 
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +44,8 @@ jobs:
       - name: Build release binary
         run: cargo build --release --target ${{ matrix.target }}
 
-      - name: Create archive
+      - name: Create archive (Linux / macOS)
+        if: runner.os != 'Windows'
         run: |
           mkdir -p dist
           cp target/${{ matrix.target }}/release/${{ matrix.artifact }} dist/
@@ -48,6 +53,17 @@ jobs:
           cp -r web dist/
           cp README.md dist/
           cd dist && tar czf ../${{ matrix.archive }} .
+
+      - name: Create archive (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist
+          Copy-Item target/${{ matrix.target }}/release/${{ matrix.artifact }} dist/
+          Copy-Item -Recurse scheme dist/
+          Copy-Item -Recurse web dist/
+          Copy-Item README.md dist/
+          Compress-Archive -Path dist/* -DestinationPath ${{ matrix.archive }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
