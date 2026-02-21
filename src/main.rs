@@ -8,6 +8,9 @@ mod repl;
 mod types;
 mod web;
 
+#[cfg(feature = "llvm-backend")]
+mod codegen;
+
 use std::process;
 
 fn main() {
@@ -33,6 +36,10 @@ fn run(args: Vec<String>) -> anyhow::Result<()> {
     let mut quiet = false;
     let mut script_args: Vec<String> = Vec::new();
     let mut collect_script_args = false;
+    #[cfg(feature = "llvm-backend")]
+    let mut jit_mode = false;
+    #[cfg(feature = "llvm-backend")]
+    let mut emit_llvm = false;
     let mut i = 1;
 
     while i < args.len() {
@@ -95,6 +102,14 @@ fn run(args: Vec<String>) -> anyhow::Result<()> {
                     collect_script_args = true;
                 }
             }
+            #[cfg(feature = "llvm-backend")]
+            "--jit" => {
+                jit_mode = true;
+            }
+            #[cfg(feature = "llvm-backend")]
+            "--emit-llvm" => {
+                emit_llvm = true;
+            }
             arg if !arg.starts_with('-') => {
                 files.push(arg.to_string());
                 // After the first file, rest are script args (like MIT-Scheme / Guile behavior)
@@ -143,6 +158,55 @@ fn run(args: Vec<String>) -> anyhow::Result<()> {
 
     // --eval expressions
     for expr in &eval_exprs {
+        #[cfg(feature = "llvm-backend")]
+        if emit_llvm {
+            match parser::parse(expr) {
+                Ok(vals) => {
+                    for val in &vals {
+                        match codegen::emit_llvm_ir(val) {
+                            Some(ir) => println!("{}", ir),
+                            None => eprintln!("; Not JIT-eligible, falling back to interpreter"),
+                        }
+                    }
+                }
+                Err(e) => {
+                    eprintln!("Parse error: {}", e);
+                    process::exit(1);
+                }
+            }
+            continue;
+        }
+
+        #[cfg(feature = "llvm-backend")]
+        if jit_mode {
+            match parser::parse(expr) {
+                Ok(vals) => {
+                    for val in vals {
+                        let result = codegen::try_jit_eval(&val)
+                            .map(Ok)
+                            .unwrap_or_else(|| eval::eval(val, &env));
+                        match result {
+                            Ok(types::Val::Void) => {}
+                            Ok(v) => {
+                                if !quiet {
+                                    println!("{}", types::write_val(&v));
+                                }
+                            }
+                            Err(e) => {
+                                eprintln!("Error: {}", e);
+                                process::exit(1);
+                            }
+                        }
+                    }
+                }
+                Err(e) => {
+                    eprintln!("Parse error: {}", e);
+                    process::exit(1);
+                }
+            }
+            continue;
+        }
+
         match eval::eval_str(expr, &env) {
             Ok(types::Val::Void) => {}
             Ok(val) => {
@@ -195,6 +259,13 @@ fn print_help() {
     println!("  -w, --web            Start the web REPL server");
     println!("  -p, --port PORT      Web server port (default: 8080)");
     println!("      --               Pass remaining args to script as *argv*");
+    #[cfg(feature = "llvm-backend")]
+    {
+        println!();
+        println!("LLVM JIT options (requires --features llvm-backend):");
+        println!("      --jit            Use LLVM JIT for integer arithmetic expressions");
+        println!("      --emit-llvm      Print LLVM IR instead of evaluating (implies --jit)");
+    }
     println!();
     println!("Examples:");
     println!("  cprustscheme                     # Interactive REPL");
@@ -204,4 +275,6 @@ fn print_help() {
     println!("  cprustscheme --script script.scm -- arg1 arg2  # Script with args");
     println!("  cprustscheme -e '(display \"hi\")' -i  # Eval then REPL");
     println!("  cprustscheme --web --port 3000    # Web REPL on port 3000");
+    #[cfg(feature = "llvm-backend")]
+    println!("  cprustscheme --jit -e '(* 1000 1000)'  # JIT-compiled evaluation");
 }

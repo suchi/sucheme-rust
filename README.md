@@ -9,9 +9,10 @@ RustでR5RS準拠のSchemeインタープリターを実装したプロジェク
 - **R5RS準拠** — 付録マクロを含むR5RS仕様を完全実装
 - **末尾呼び出し最適化** — トランポリンループによる適切な末尾呼び出し（スタックオーバーフローなし）
 - **インタラクティブREPL** — Emacsキーバインドとコマンド履歴（rustyline使用）
+- **LLVM 17 JIT バックエンド** — `--features llvm-backend` で整数演算をネイティブコードに JIT コンパイル
 - **Web UI** — 内蔵HTTPサーバーによるブラウザREPL
 - **Schemeで実装した標準ライブラリ** — R5RS付録マクロとユーティリティ
-- **豊富なCLIオプション** — `--eval`、`--load`、`--script`、`--interactive` など
+- **豊富なCLIオプション** — `--eval`、`--load`、`--script`、`--interactive`、`--jit` など
 
 ## クイックスタート
 
@@ -52,7 +53,48 @@ Usage: cprustscheme [OPTIONS] [FILE [ARGS...]]
   -w, --web            Webサーバー起動
   -p, --port PORT      ポート番号（デフォルト: 8080）
       --               以降の引数をスクリプトに渡す (*argv*)
+
+LLVM JITオプション (--features llvm-backend でビルド時のみ):
+      --jit            LLVM JIT で整数演算式をコンパイル実行
+      --emit-llvm      LLVM IR を出力（評価なし）
 ```
+
+## LLVM JIT バックエンド
+
+`llvm-backend` feature を有効にすると、整数演算式を LLVM 17 でネイティブコードに JIT コンパイルして実行できます。
+
+```bash
+# LLVM 17 dev ヘッダーのインストール
+sudo apt-get install llvm-17-dev libpolly-17-dev
+
+# LLVM JIT バックエンド付きビルド
+cargo build --features llvm-backend
+
+# JIT モードで実行（インタープリターへの透過的フォールバック付き）
+./target/debug/cprustscheme --jit -e "(let ((n 1000)) (* n n))"
+# → 1000000
+
+# 生成される LLVM IR の確認（LLVM が定数式を最適化する様子も確認可能）
+./target/debug/cprustscheme --emit-llvm -e "(+ 1 2 3)"
+# → define i64 @__entry() { entry: ret i64 6 }
+#   ← LLVM が (+ 1 2 3) を ret i64 6 に定数畳み込み！
+
+# SCHEME_DUMP_IR=1 でデバッグ出力
+SCHEME_DUMP_IR=1 ./target/debug/cprustscheme --jit -e "(if (> 10 5) 42 0)"
+```
+
+### JIT 対応サブセット
+
+| カテゴリ | 対応する式 |
+|---------|-----------|
+| リテラル | 整数、ブール値 |
+| 算術 | `+`, `-`, `*`, `quotient`, `remainder` |
+| 比較 | `=`, `<`, `>`, `<=`, `>=` |
+| 論理 | `not` |
+| 制御 | `if`, `begin` |
+| バインディング | `let`, `let*` |
+
+上記以外の式（文字列操作、リスト操作、入出力など）は透過的にインタープリターにフォールバックします。
 
 ## アーキテクチャ
 
