@@ -1,0 +1,9 @@
+# Cargo workspace configuration.
+# LLVM_SYS_170_PREFIX tells llvm-sys where to find the LLVM 17 installation.
+# This default assumes a Debian/Ubuntu system (sudo apt-get install llvm-17-dev libpolly-17-dev).
+# Override via environment variable if LLVM is installed elsewhere, e.g.:
+#   - macOS Homebrew: LLVM_SYS_170_PREFIX=$(brew --prefix llvm@17)
+#   - Custom build:   export LLVM_SYS_170_PREFIX=/path/to/llvm-17
+# Set force=false so that a user-provided environment variable takes precedence.
+[env]
+LLVM_SYS_170_PREFIX = { value = "/usr/lib/llvm-17", force = false }

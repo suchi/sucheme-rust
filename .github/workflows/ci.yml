@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "copilot/**"]
+  pull_request:
+    branches: ["main"]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        toolchain: [stable]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+
+      - name: Check formatting
+        run: cargo fmt --check
+
+      - name: Clippy (default features)
+        run: cargo clippy
+
+      - name: Build (default features)
+        run: cargo build --verbose
+
+      - name: Run tests (default features)
+        run: cargo test --verbose
+
+  test-llvm:
+    name: Test with LLVM backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Install LLVM 17 dev
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y llvm-17-dev libpolly-17-dev
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-llvm-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-llvm-
+
+      - name: Clippy (llvm-backend)
+        run: cargo clippy --features llvm-backend
+        env:
+          LLVM_SYS_170_PREFIX: /usr/lib/llvm-17
+
+      - name: Build (llvm-backend)
+        run: cargo build --features llvm-backend --verbose
+        env:
+          LLVM_SYS_170_PREFIX: /usr/lib/llvm-17
+
+      - name: Run tests (llvm-backend)
+        run: cargo test --features llvm-backend --verbose
+        env:
+          LLVM_SYS_170_PREFIX: /usr/lib/llvm-17
+
+  build-release:
+    name: Build release binary
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build release
+        run: cargo build --release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cprustscheme-linux-x86_64
+          path: target/release/cprustscheme
+          retention-days: 30
