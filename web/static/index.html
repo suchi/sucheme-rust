@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cprustscheme – Online REPL</title>
+  <style>
+    :root {
+      --bg: #1e1e2e;
+      --surface: #313244;
+      --border: #45475a;
+      --text: #cdd6f4;
+      --muted: #6c7086;
+      --green: #a6e3a1;
+      --red: #f38ba8;
+      --blue: #89b4fa;
+      --yellow: #f9e2af;
+      --purple: #cba6f7;
+      --font-mono: "Cascadia Code", "Fira Code", "JetBrains Mono", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 12px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    header h1 {
+      font-size: 16px;
+      color: var(--purple);
+      letter-spacing: 0.05em;
+    }
+
+    header .badge {
+      font-size: 11px;
+      background: var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: var(--muted);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 8px;
+      gap: 8px;
+    }
+
+    #output {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: var(--font-mono);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .output-line { color: var(--text); }
+    .input-line  { color: var(--blue); }
+    .result-line { color: var(--green); }
+    .error-line  { color: var(--red); }
+    .info-line   { color: var(--muted); }
+
+    #input-area {
+      display: flex;
+      gap: 8px;
+    }
+
+    #prompt {
+      color: var(--purple);
+      line-height: 36px;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    #input {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      outline: none;
+      resize: vertical;
+      min-height: 36px;
+    }
+
+    #input:focus { border-color: var(--blue); }
+
+    #run-btn {
+      background: var(--blue);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      cursor: pointer;
+      align-self: flex-start;
+      white-space: nowrap;
+    }
+
+    #run-btn:hover { opacity: 0.85; }
+    #run-btn:active { opacity: 0.7; }
+
+    #clear-btn {
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+
+    #clear-btn:hover { color: var(--text); }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      padding: 4px 0;
+    }
+
+    /* Examples panel */
+    #examples {
+      padding: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .example-btn {
+      background: var(--border);
+      color: var(--text);
+      border: none;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .example-btn:hover { background: var(--blue); color: var(--bg); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚡ cprustscheme</h1>
+    <span class="badge">R5RS</span>
+    <span class="badge">Online REPL</span>
+  </header>
+
+  <main>
+    <div id="output">
+      <span class="info-line">Welcome to cprustscheme – R5RS-compatible Scheme interpreter.</span>
+      <br>
+      <span class="info-line">Type Scheme expressions below and press Enter or click Run.</span>
+      <br>
+    </div>
+
+    <div id="examples">
+      <button class="example-btn" onclick="setExample('(+ 1 2 3)')">+ arithmetic</button>
+      <button class="example-btn" onclick="setExample('(define (fact n) (if (= n 0) 1 (* n (fact (- n 1)))))\n(fact 10)')">factorial</button>
+      <button class="example-btn" onclick="setExample('(map (lambda (x) (* x x)) \'(1 2 3 4 5))')">map</button>
+      <button class="example-btn" onclick="setExample('(filter odd? \'(1 2 3 4 5 6))')">filter</button>
+      <button class="example-btn" onclick="setExample('(define (fib n)\n  (let loop ((i 0) (a 0) (b 1))\n    (if (= i n) a\n        (loop (+ i 1) b (+ a b)))))\n(fib 20)')">fibonacci</button>
+      <button class="example-btn" onclick="setExample('(let loop ((i 1) (sum 0))\n  (if (> i 100) sum\n      (loop (+ i 1) (+ sum i))))')">sum 1-100</button>
+      <button class="example-btn" onclick="setExample('(sort \'(3 1 4 1 5 9 2 6) <)')">sort</button>
+      <button class="example-btn" onclick="setExample('`(1 2 ,(+ 1 2) ,@(list 4 5))')">quasiquote</button>
+    </div>
+
+    <div id="input-area">
+      <span id="prompt">scheme&gt;&nbsp;</span>
+      <textarea id="input" rows="3" placeholder="(+ 1 2)" autofocus
+                onkeydown="handleKey(event)"></textarea>
+      <button id="run-btn" onclick="runCode()">Run ⏎</button>
+      <button id="clear-btn" onclick="clearOutput()">Clear</button>
+    </div>
+    <div class="hint">Shift+Enter for newline · Enter to run · Ctrl+L to clear</div>
+  </main>
+
+  <script>
+    const output = document.getElementById('output');
+    const input  = document.getElementById('input');
+    const history = [];
+    let histIdx = -1;
+
+    function appendLine(text, cls) {
+      if (!text) return;
+      const span = document.createElement('span');
+      span.className = cls;
+      span.textContent = text;
+      output.appendChild(span);
+      const br = document.createElement('br');
+      output.appendChild(br);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    async function runCode() {
+      const code = input.value.trim();
+      if (!code) return;
+
+      history.unshift(code);
+      histIdx = -1;
+
+      appendLine('scheme> ' + code, 'input-line');
+      input.value = '';
+
+      try {
+        const res = await fetch('/api/eval', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code }),
+        });
+        const data = await res.json();
+        if (data.output) appendLine(data.output, 'output-line');
+        if (data.error)  appendLine('Error: ' + data.error, 'error-line');
+        else if (data.result !== null && data.result !== undefined && data.result !== '') {
+          appendLine(data.result, 'result-line');
+        }
+      } catch (e) {
+        appendLine('Network error: ' + e.message, 'error-line');
+      }
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        runCode();
+      }
+      if (e.key === 'l' && e.ctrlKey) {
+        e.preventDefault();
+        clearOutput();
+      }
+      if (e.key === 'ArrowUp' && e.ctrlKey) {
+        e.preventDefault();
+        if (histIdx + 1 < history.length) {
+          histIdx++;
+          input.value = history[histIdx];
+        }
+      }
+      if (e.key === 'ArrowDown' && e.ctrlKey) {
+        e.preventDefault();
+        if (histIdx > 0) {
+          histIdx--;
+          input.value = history[histIdx];
+        } else {
+          histIdx = -1;
+          input.value = '';
+        }
+      }
+    }
+
+    function clearOutput() {
+      output.innerHTML = '';
+    }
+
+    function setExample(code) {
+      input.value = code;
+      input.focus();
+    }
+  </script>
+</body>
+</html>

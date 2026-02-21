@@ -1,0 +1,23 @@
+[package]
+name = "cprustscheme"
+version = "0.1.0"
+edition = "2021"
+description = "R5RS-compliant Scheme interpreter in Rust"
+license = "MIT"
+repository = "https://github.com/suchi/cprustscheme"
+
+[[bin]]
+name = "cprustscheme"
+path = "src/main.rs"
+
+[dependencies]
+actix-files = "0.6"
+actix-web = "4"
+anyhow = "1"
+rustyline = "14"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+[dev-dependencies]
+# No extra test deps needed
