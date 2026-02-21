@@ -1,6 +1,6 @@
 ;;; examples/06-strings.scm
-;;; cprustscheme チュートリアル - 第6章: 文字列と文字
-;;; 実行方法: cprustscheme examples/06-strings.scm
+;;; sucheme-rust チュートリアル - 第6章: 文字列と文字
+;;; 実行方法: sucheme-rust examples/06-strings.scm
 
 (display "=== 第6章: 文字列と文字 ===") (newline)
 

@@ -1,6 +1,6 @@
 ;;; examples/13-io.scm
-;;; cprustscheme チュートリアル - 第13章: 入出力
-;;; 実行方法: cprustscheme examples/13-io.scm
+;;; sucheme-rust チュートリアル - 第13章: 入出力
+;;; 実行方法: sucheme-rust examples/13-io.scm
 
 (display "=== 第13章: 入出力 ===") (newline)
 

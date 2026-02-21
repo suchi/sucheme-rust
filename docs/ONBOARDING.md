@@ -1,6 +1,6 @@
-# cprustscheme オンボーディングガイド
+# sucheme-rust オンボーディングガイド
 
-**cprustscheme** へようこそ。RustでR5RS準拠のSchemeインタープリターを実装したプロジェクトです。
+**sucheme-rust** へようこそ。RustでR5RS準拠のSchemeインタープリターを実装したプロジェクトです。
 
 ## 目次
 
@@ -36,8 +36,8 @@ cargo --version
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/suchi/cprustscheme.git
-cd cprustscheme
+git clone https://github.com/suchi/sucheme-rust.git
+cd sucheme-rust
 
 # デバッグビルド
 cargo build
@@ -62,7 +62,7 @@ cargo run -- --web
 
 # リリースバイナリのビルド
 cargo build --release
-./target/release/cprustscheme
+./target/release/sucheme-rust
 ```
 
 ---
@@ -70,7 +70,7 @@ cargo build --release
 ## プロジェクト構成
 
 ```
-cprustscheme/
+sucheme-rust/
 ├── src/
 │   ├── main.rs          # エントリポイント、CLIオプション解析
 │   ├── types.rs         # Val, Env, Proc, SchemeError 型定義
@@ -368,7 +368,7 @@ git push origin v0.1.0
 プロジェクトルートから実行してください。
 
 ```bash
-cd /path/to/cprustscheme
+cd /path/to/sucheme-rust
 cargo run
 ```
 

@@ -75,11 +75,11 @@ sudo apt-get install llvm-17-dev libpolly-17-dev
 cargo build --features llvm-backend
 
 # JIT モードで実行
-cprustscheme --jit -e "(let ((n 1000)) (* n n))"
+sucheme-rust --jit -e "(let ((n 1000)) (* n n))"
 # → 1000000
 
 # LLVM IR を出力（デバッグ用）
-cprustscheme --emit-llvm -e "(+ 1 2 3)"
+sucheme-rust --emit-llvm -e "(+ 1 2 3)"
 # → LLVM IR (LLVM が定数畳み込みで ret i64 6 に最適化)
 ```
 

@@ -1,6 +1,6 @@
 ;;; examples/14-sorting-algorithms.scm
-;;; cprustscheme チュートリアル - 第14章: ソートアルゴリズム
-;;; 実行方法: cprustscheme examples/14-sorting-algorithms.scm
+;;; sucheme-rust チュートリアル - 第14章: ソートアルゴリズム
+;;; 実行方法: sucheme-rust examples/14-sorting-algorithms.scm
 
 (display "=== 第14章: ソートアルゴリズム ===") (newline)
 

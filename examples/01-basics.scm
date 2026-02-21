@@ -1,6 +1,6 @@
 ;;; examples/01-basics.scm
-;;; cprustscheme チュートリアル - 第1章: 基本的な式と値
-;;; 実行方法: cprustscheme examples/01-basics.scm
+;;; sucheme-rust チュートリアル - 第1章: 基本的な式と値
+;;; 実行方法: sucheme-rust examples/01-basics.scm
 
 (display "=== 第1章: 基本的な式と値 ===") (newline)
 

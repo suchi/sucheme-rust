@@ -1,4 +1,4 @@
-;;; cprustscheme Standard Library
+;;; sucheme-rust Standard Library
 ;;; R5RS-compliant standard procedures implemented in Scheme.
 ;;; This file is loaded automatically at startup.
 

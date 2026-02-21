@@ -1,6 +1,6 @@
 ;;; examples/10-macros.scm
-;;; cprustscheme チュートリアル - 第10章: マクロ (syntax-rules)
-;;; 実行方法: cprustscheme examples/10-macros.scm
+;;; sucheme-rust チュートリアル - 第10章: マクロ (syntax-rules)
+;;; 実行方法: sucheme-rust examples/10-macros.scm
 
 (display "=== 第10章: マクロ ===") (newline)
 

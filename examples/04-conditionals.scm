@@ -1,6 +1,6 @@
 ;;; examples/04-conditionals.scm
-;;; cprustscheme チュートリアル - 第4章: 条件分岐
-;;; 実行方法: cprustscheme examples/04-conditionals.scm
+;;; sucheme-rust チュートリアル - 第4章: 条件分岐
+;;; 実行方法: sucheme-rust examples/04-conditionals.scm
 
 (display "=== 第4章: 条件分岐 ===") (newline)
 

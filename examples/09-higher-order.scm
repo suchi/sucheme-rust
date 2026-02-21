@@ -1,6 +1,6 @@
 ;;; examples/09-higher-order.scm
-;;; cprustscheme チュートリアル - 第9章: 高階関数とプログラミングスタイル
-;;; 実行方法: cprustscheme examples/09-higher-order.scm
+;;; sucheme-rust チュートリアル - 第9章: 高階関数とプログラミングスタイル
+;;; 実行方法: sucheme-rust examples/09-higher-order.scm
 
 (display "=== 第9章: 高階関数 ===") (newline)
 

@@ -1,4 +1,4 @@
-//! cprustscheme - R5RS-compliant Scheme interpreter in Rust.
+//! sucheme-rust - R5RS-compliant Scheme interpreter in Rust.
 
 mod builtins;
 mod eval;
@@ -75,7 +75,7 @@ fn run(args: Vec<String>) -> anyhow::Result<()> {
                 return Ok(());
             }
             "--version" | "-v" => {
-                println!("cprustscheme {}", env!("CARGO_PKG_VERSION"));
+                println!("sucheme-rust {}", env!("CARGO_PKG_VERSION"));
                 return Ok(());
             }
             "--eval" | "-e" => {
@@ -251,7 +251,7 @@ fn run(args: Vec<String>) -> anyhow::Result<()> {
 }
 
 fn print_help() {
-    println!("Usage: cprustscheme [OPTIONS] [FILE [ARGS...]]");
+    println!("Usage: sucheme-rust [OPTIONS] [FILE [ARGS...]]");
     println!();
     println!("Options:");
     println!("  -h, --help           Show this help message");
@@ -278,13 +278,13 @@ fn print_help() {
     }
     println!();
     println!("Examples:");
-    println!("  cprustscheme                     # Interactive REPL");
-    println!("  cprustscheme -e '(+ 1 2)'        # Evaluate expression");
-    println!("  cprustscheme script.scm           # Run a script file");
-    println!("  cprustscheme -l lib.scm script.scm  # Load lib then run script");
-    println!("  cprustscheme --script script.scm -- arg1 arg2  # Script with args");
-    println!("  cprustscheme -e '(display \"hi\")' -i  # Eval then REPL");
-    println!("  cprustscheme --web --port 3000    # Web REPL on port 3000");
+    println!("  sucheme-rust                     # Interactive REPL");
+    println!("  sucheme-rust -e '(+ 1 2)'        # Evaluate expression");
+    println!("  sucheme-rust script.scm           # Run a script file");
+    println!("  sucheme-rust -l lib.scm script.scm  # Load lib then run script");
+    println!("  sucheme-rust --script script.scm -- arg1 arg2  # Script with args");
+    println!("  sucheme-rust -e '(display \"hi\")' -i  # Eval then REPL");
+    println!("  sucheme-rust --web --port 3000    # Web REPL on port 3000");
     #[cfg(feature = "llvm-backend")]
-    println!("  cprustscheme --jit -e '(* 1000 1000)'  # JIT-compiled evaluation");
+    println!("  sucheme-rust --jit -e '(* 1000 1000)'  # JIT-compiled evaluation");
 }

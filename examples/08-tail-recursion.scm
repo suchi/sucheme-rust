@@ -1,6 +1,6 @@
 ;;; examples/08-tail-recursion.scm
-;;; cprustscheme チュートリアル - 第8章: 末尾再帰とループ
-;;; 実行方法: cprustscheme examples/08-tail-recursion.scm
+;;; sucheme-rust チュートリアル - 第8章: 末尾再帰とループ
+;;; 実行方法: sucheme-rust examples/08-tail-recursion.scm
 
 (display "=== 第8章: 末尾再帰とループ ===") (newline)
 

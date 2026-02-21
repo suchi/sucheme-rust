@@ -1,6 +1,6 @@
 # Statement of Work (SOW)
 
-## Project: cprustscheme
+## Project: sucheme-rust
 
 **Date:** 2026-02-21  
 **Version:** 1.0

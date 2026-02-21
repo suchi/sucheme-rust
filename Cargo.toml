@@ -1,13 +1,13 @@
 [package]
-name = "cprustscheme"
+name = "sucheme-rust"
 version = "0.1.0"
 edition = "2021"
 description = "R5RS-compliant Scheme interpreter in Rust"
 license = "MIT"
-repository = "https://github.com/suchi/cprustscheme"
+repository = "https://github.com/suchi/sucheme-rust"
 
 [[bin]]
-name = "cprustscheme"
+name = "sucheme-rust"
 path = "src/main.rs"
 
 [features]

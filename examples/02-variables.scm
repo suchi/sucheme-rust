@@ -1,6 +1,6 @@
 ;;; examples/02-variables.scm
-;;; cprustscheme チュートリアル - 第2章: 変数と定義
-;;; 実行方法: cprustscheme examples/02-variables.scm
+;;; sucheme-rust チュートリアル - 第2章: 変数と定義
+;;; 実行方法: sucheme-rust examples/02-variables.scm
 
 (display "=== 第2章: 変数と定義 ===") (newline)
 

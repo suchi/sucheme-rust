@@ -1,6 +1,6 @@
 # R5RS 対応状況表
 
-cprustscheme の R5RS (Revised⁵ Report on the Algorithmic Language Scheme) 準拠状況です。
+sucheme-rust の R5RS (Revised⁵ Report on the Algorithmic Language Scheme) 準拠状況です。
 
 **凡例:**
 - ✅ 実装済み

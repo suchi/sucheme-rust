@@ -1,6 +1,6 @@
 ;;; examples/18-lazy-evaluation.scm
-;;; cprustscheme チュートリアル - 第18章: 遅延評価とストリーム
-;;; 実行方法: cprustscheme examples/18-lazy-evaluation.scm
+;;; sucheme-rust チュートリアル - 第18章: 遅延評価とストリーム
+;;; 実行方法: sucheme-rust examples/18-lazy-evaluation.scm
 
 (display "=== 第18章: 遅延評価とストリーム ===") (newline)
 

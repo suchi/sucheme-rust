@@ -1,6 +1,6 @@
 ;;; examples/05-lists.scm
-;;; cprustscheme チュートリアル - 第5章: リストとペア
-;;; 実行方法: cprustscheme examples/05-lists.scm
+;;; sucheme-rust チュートリアル - 第5章: リストとペア
+;;; 実行方法: sucheme-rust examples/05-lists.scm
 
 (display "=== 第5章: リストとペア ===") (newline)
 

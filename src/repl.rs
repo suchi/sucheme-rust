@@ -28,7 +28,7 @@ pub fn run_repl_with_env(env: Rc<RefCell<Env>>) -> anyhow::Result<()> {
 
     let _ = rl.load_history(HISTORY_FILE);
 
-    println!("cprustscheme REPL (R5RS-compatible Scheme)");
+    println!("sucheme-rust REPL (R5RS-compatible Scheme)");
     println!("Type (exit) or Ctrl-D to quit.");
     println!();
 
@@ -165,7 +165,7 @@ pub fn load_stdlib(env: &Rc<RefCell<Env>>) {
     let locations = [
         "scheme/stdlib.scm",
         "../scheme/stdlib.scm",
-        "/usr/share/cprustscheme/stdlib.scm",
+        "/usr/share/sucheme-rust/stdlib.scm",
     ];
 
     // Find binary directory
