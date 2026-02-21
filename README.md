@@ -54,6 +54,9 @@ cargo build --release
 # Schemeファイルの実行
 .\target\release\sucheme-rust.exe myfile.scm
 
+# ファイルを読み込んでからREPL
+.\target\release\sucheme-rust.exe -l lib.scm -i
+
 # Webサーバー起動 (http://localhost:8080)
 .\target\release\sucheme-rust.exe --web
 ```
